@@ -17,8 +17,12 @@ def print_header
 end
 
 def print(students)
-  students.each_with_index do |student, index|
-    puts "#{index + 1}. #{student[:name]} (#{student[:cohort]} cohort)"
+  puts "Please enter a letter"
+  letter = gets.chomp.upcase
+  students.select.with_index do |student, index|
+    if student[:name].chars.first == letter
+      puts "#{index + 1}. #{student[:name]} (#{student[:cohort]} cohort)"
+    end
   end
 end
 
@@ -26,7 +30,8 @@ def print_footer(names)
   puts "Overall, we have #{names.count} great students "
 end
 
-students = input_students
+
 print_header
+selective_print(students)
 print(students)
 print_footer(students)
