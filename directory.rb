@@ -17,10 +17,8 @@ def print_header
 end
 
 def print(students)
-  puts "Please enter a letter"
-  letter = gets.chomp.upcase
   students.select.with_index do |student, index|
-    if student[:name].chars.first == letter
+    if student[:name].chars.length < 12
       puts "#{index + 1}. #{student[:name]} (#{student[:cohort]} cohort)"
     end
   end
@@ -30,8 +28,7 @@ def print_footer(names)
   puts "Overall, we have #{names.count} great students "
 end
 
-
+students = input_students
 print_header
-selective_print(students)
 print(students)
 print_footer(students)
