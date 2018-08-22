@@ -22,12 +22,12 @@ def student_info(name)
   puts "Please enter their height"
   height = gets.chomp
   student = {name: name, cohort: :november, hobbies: hobbies, country_of_birth: country_of_birth, height: height}
-  return student
+    return student
 end
 
 def print_header
   puts "The students of Villains Academy"
-  puts "-------------"
+  puts "-------------".center(30)
 end
 
 def print(students)
