@@ -7,7 +7,11 @@ def input_students
 
   while !name.empty? do
     students << student_info(name)
-    puts "Now we have #{students.count} students"
+    if students.count == 1
+      puts "Now we have 1 student"
+    else
+      puts "Now we have #{students.count} students"
+    end
     puts "Please enter another student"
     name = gets.chomp
   end
@@ -15,14 +19,19 @@ def input_students
 end
 
 def student_info(name)
+  puts "Please enter their cohort"
+  cohort = gets.chomp.to_sym
+  if cohort == ""
+    cohort = "november"
+  end
   puts "Please enter their hobbies"
   hobbies = gets.chomp
   puts "Please enter their country of birth"
   country_of_birth = gets.chomp
   puts "Please enter their height"
   height = gets.chomp
-  student = {name: name, cohort: :november, hobbies: hobbies, country_of_birth: country_of_birth, height: height}
-    return student
+  student = {name: name, cohort: cohort, hobbies: hobbies, country_of_birth: country_of_birth, height: height}
+  return student
 end
 
 def print_header
@@ -36,6 +45,7 @@ def print(students)
     puts "#{students[i][:name]} (#{students[i][:cohort]} cohort), hobbies: #{students[i][:hobbies]}, country of birth: #{students[i][:country_of_birth]}, height: #{students[i][:height]}"
     i += 1
   end
+
 end
 
 def print_footer(names)
