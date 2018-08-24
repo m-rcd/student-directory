@@ -1,21 +1,18 @@
+@students = []
 def input_students
   puts "Please enter the names of the students"
   puts "To finish, just hit return twice"
-  students = []
-
   name = gets.chomp
-
   while !name.empty? do
-    students << student_info(name)
-    if students.count == 1
+    @students << student_info(name)
+    if @students.count == 1
       puts "Now we have 1 student"
     else
-      puts "Now we have #{students.count} students"
+      puts "Now we have #{@students.count} students"
     end
     puts "Please enter another student"
     name = gets.chomp
   end
-  students
 end
 
 def student_info(name)
@@ -34,46 +31,55 @@ def student_info(name)
   if !student.empty?
     return student
   end
-
-end
-
-def print_header
-  puts "The students of Villains Academy"
-  puts "-------------".center(30)
-end
-
-def print(students)
-  i = 0
-  until i == students.length
-    puts "#{students[i][:name]} (#{students[i][:cohort]} cohort), hobbies: #{students[i][:hobbies]}, country of birth: #{students[i][:country_of_birth]}, height: #{students[i][:height]}"
-    i += 1
-  end
-end
-
-def print_footer(names)
-  puts "Overall, we have #{names.count} great students "
 end
 
 def interactive_menu
-  students = []
   loop do
-    puts "1. Input the students"
-    puts "2. Show the students"
-    puts "9. Exit"
-    selection = gets.chomp
-    case selection
-      when "1"
-        students = input_students
-      when "2"
-        print_header
-        print(students)
-        print_footer(students)
-      when "9"
-        exit
-      else
-        puts "I don't know what you meant, try again"
-      end
+    print_menu
+    process(gets.chomp)
+  end
+end
+
+def print_menu
+  puts "1. Input the students"
+  puts "2. Show the students"
+  puts "9. Exit"
+end
+
+def show_students
+  print_header
+  print_students_list
+  print_footer
+end
+
+def process(selection)
+  case selection
+    when "1"
+      input_students
+    when "2"
+      show_students
+    when "9"
+      exit
+    else
+      puts "I don't know what you mean, try again"
     end
+  end
+
+  def print_header
+    puts "The students of Villains Academy"
+    puts "-------------".center(30)
+  end
+
+  def print_students_list
+    i = 0
+    until i == @students.length
+      puts "#{@students[i][:name]} (#{@students[i][:cohort]} cohort), hobbies: #{@students[i][:hobbies]}, country of birth: #{@students[i][:country_of_birth]}, height: #{@students[i][:height]}"
+      i += 1
+    end
+  end
+
+  def print_footer
+   "Overall, we have #{@students.count} great students "
   end
 
 interactive_menu
