@@ -55,13 +55,13 @@ end
 def save_students
   puts 'Enter the name of the file'
   file_name = STDIN.gets.chomp
-  file = File.open(file_name, 'w')
-  @students.each do |student|
+  open(file_name, mode='w') do |file|
+    @students.each do |student|
     student_data = [student[:name], student[:cohort]]
     csv_line = student_data.join(',')
     file.puts csv_line
+    end
   end
-  file.close
 end
 
 def load_students(filename)
@@ -114,7 +114,7 @@ def print_students_list
   until i == @students.length
     puts "#{@students[i][:name]} (#{@students[i][:cohort]} cohort)"\
       ", hobbies: #{@students[i][:hobbies]}," \
-      "country of birth: #{@students[i][:country_of_birth]}, " \
+      " country of birth: #{@students[i][:country_of_birth]}, " \
       "height: #{@students[i][:height]}"
     i += 1
   end
