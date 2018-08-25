@@ -53,7 +53,9 @@ def show_students
 end
 
 def save_students
-  file = File.open('students.csv', 'w')
+  puts 'Enter the name of the file'
+  file_name = STDIN.gets.chomp
+  file = File.open(file_name, 'w')
   @students.each do |student|
     student_data = [student[:name], student[:cohort]]
     csv_line = student_data.join(',')
@@ -62,7 +64,7 @@ def save_students
   file.close
 end
 
-def load_students(filename = 'students.csv')
+def load_students(filename)
   file = File.open(filename, 'r')
   file.readlines.each do |line|
     name, cohort = line.chomp.split(',')
@@ -72,7 +74,8 @@ def load_students(filename = 'students.csv')
 end
 
 def try_load_students
-  filename = ARGV.first
+  puts 'Please enter a filename'
+  filename = STDIN.gets.chomp
   filename = 'students.csv' if filename.nil?
   if File.exist?(filename)
     load_students(filename)
@@ -93,8 +96,7 @@ def process(selection)
     save_students
     puts 'Students list has been saved to students.csv'
   when '4'
-    load_students
-    puts 'Students list has been loaded from students.csv'
+    try_load_students
   when '9'
     exit
   else
@@ -122,5 +124,5 @@ def print_footer
   puts "Overall, we have #{@students.count} great students "
 end
 
-try_load_students
 interactive_menu
+try_load_students
