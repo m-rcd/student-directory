@@ -66,17 +66,17 @@ def load_students(filename = 'students.csv')
   file = File.open(filename, 'r')
   file.readlines.each do |line|
     name, cohort = line.chomp.split(',')
-    @students << { name: name, cohort: cohort}
+    @students << { name: name, cohort: cohort.to_sym}
   end
   file.close
 end
 
 def try_load_students
   filename = ARGV.first
-  return if filename.nil?
+  filename = 'students.csv' if filename.nil?
   if File.exist?(filename)
     load_students(filename)
-    puts "Loaded #{@students.count} from #{filename}"
+    puts "Loaded #{@students.count} students from #{filename}"
   else
     puts "Sorry, #{filename} doesn't exist."
     exit
@@ -91,8 +91,10 @@ def process(selection)
     show_students
   when '3'
     save_students
+    puts 'Students list has been saved to students.csv'
   when '4'
     load_students
+    puts 'Students list has been loaded from students.csv'
   when '9'
     exit
   else
@@ -120,4 +122,5 @@ def print_footer
   puts "Overall, we have #{@students.count} great students "
 end
 
+try_load_students
 interactive_menu
