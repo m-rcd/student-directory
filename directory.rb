@@ -1,5 +1,6 @@
-@students = []
 require 'csv'
+@students = []
+@input_students_count = 0
 
 def input_students
   puts 'Please enter the names of the students'
@@ -14,6 +15,7 @@ def input_students
     end
     puts 'Please enter another student'
     name = STDIN.gets.chomp
+    @input_students_count += 1
   end
 end
 
@@ -44,7 +46,7 @@ def print_menu
   puts '2. Show the students'
   puts '3. Save the list to students.csv'
   puts '4. Load the list from students.csv'
-  puts '9. Exit'
+  puts '5. Exit'
 end
 
 def show_students
@@ -58,7 +60,8 @@ def save_students
   file_name = STDIN.gets.chomp
   CSV.open(file_name, 'wb') do |csv|
     @students.each do |student|
-      student_data = [student[:name], student[:cohort]]
+      student_data = [student[:name], student[:cohort], student[:hobbies],
+                      student[:country_of_birth], student[:height]]
       csv << student_data
     end
   end
@@ -66,11 +69,12 @@ end
 
 def load_students(filename)
   file = File.open(filename, 'r')
-  file.readlines.each do |line|
-    name, cohort = line.chomp.split(',')
-    @students << { name: name, cohort: cohort.to_sym}
+  CSV.foreach(filename) do |row|
+    name, cohort, hobbies, country_of_birth, height = row
+    @students << { name: name, cohort: cohort.to_sym, hobbies: hobbies.to_sym,
+                   country_of_birth: country_of_birth.to_sym, 
+                   height: height.to_sym}
   end
-  file.close
 end
 
 def try_load_students
@@ -79,7 +83,8 @@ def try_load_students
   filename = 'students.csv' if filename.nil?
   if File.exist?(filename)
     load_students(filename)
-    puts "Loaded #{@students.count} students from #{filename}"
+    puts "Loaded #{@students.count - @input_students_count} students "\
+      "from #{filename}"
   else
     puts "Sorry, #{filename} doesn't exist."
     exit
@@ -97,7 +102,7 @@ def process(selection)
     puts 'Students list has been saved to students.csv'
   when '4'
     try_load_students
-  when '9'
+  when '5'
     exit
   else
     puts "I don't know what you mean, try again"
@@ -110,13 +115,11 @@ def print_header
 end
 
 def print_students_list
-  i = 0
-  until i == @students.length
-    puts "#{@students[i][:name]} (#{@students[i][:cohort]} cohort)"\
-      ", hobbies: #{@students[i][:hobbies]}," \
-      " country of birth: #{@students[i][:country_of_birth]}, " \
-      "height: #{@students[i][:height]}"
-    i += 1
+  @students.each do |student|
+    puts "#{student[:name]} (#{student[:cohort]} cohort)"\
+      ", hobbies: #{student[:hobbies]}," \
+      " country of birth: #{student[:country_of_birth]}, " \
+      "height: #{student[:height]}"
   end
 end
 
