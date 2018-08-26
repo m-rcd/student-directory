@@ -2,12 +2,19 @@ require 'csv'
 @students = []
 @input_students_count = 0
 
+def interactive_menu
+  loop do
+    print_menu
+    process(STDIN.gets.chomp)
+  end
+end
+
 def input_students
   puts 'Please enter the names of the students'
   puts 'To finish, just hit return twice'
   name = STDIN.gets.chomp
   until name.empty?
-    @students << student_info(name)
+    students_list(student_info(name))
     if @students.count == 1
       puts 'Now we have 1 student'
     else
@@ -34,25 +41,17 @@ def student_info(name)
   return student unless student.empty?
 end
 
-def interactive_menu
-  loop do
-    print_menu
-    process(STDIN.gets.chomp)
-  end
+def students_list(list)
+  @students << list
 end
 
 def print_menu
+  puts ' '
   puts '1. Input the students'
   puts '2. Show the students'
   puts '3. Save the list to students.csv'
   puts '4. Load the list from students.csv'
   puts '5. Exit'
-end
-
-def show_students
-  print_header
-  print_students_list
-  print_footer
 end
 
 def save_students
@@ -68,12 +67,11 @@ def save_students
 end
 
 def load_students(filename)
-  file = File.open(filename, 'r')
   CSV.foreach(filename) do |row|
     name, cohort, hobbies, country_of_birth, height = row
-    @students << { name: name, cohort: cohort.to_sym, hobbies: hobbies.to_sym,
-                   country_of_birth: country_of_birth.to_sym, 
-                   height: height.to_sym}
+    students_list(name: name, cohort: cohort.to_sym, hobbies: hobbies.to_sym,
+                  country_of_birth: country_of_birth.to_sym, 
+                  height: height.to_sym)
   end
 end
 
@@ -90,6 +88,7 @@ def try_load_students
     exit
   end
 end
+
 
 def process(selection)
   case selection
@@ -112,6 +111,12 @@ end
 def print_header
   puts 'The students of Villains Academy'
   puts '-------------'.center(30)
+end
+
+def show_students
+  print_header
+  print_students_list
+  print_footer
 end
 
 def print_students_list
